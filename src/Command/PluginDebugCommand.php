@@ -25,8 +25,9 @@ class PluginDebugCommand extends ContainerAwareCommand {
    */
   protected function configure() {
     $this->setName('plugin:debug')
-      ->setDescription($this->trans('List all plugin types, or all plugin instances of a particular type'))
-      ->addArgument('type', InputArgument::OPTIONAL, $this->trans('Plugin type'));
+      ->setDescription($this->trans('Display all plugin types, plugin instances of a specific type, or a specific plugin instance.'))
+      ->addArgument('type', InputArgument::OPTIONAL, $this->trans('Plugin type'))
+      ->addArgument('id', InputArgument::OPTIONAL, $this->trans('Plugin ID'));
   }
 
   /**
@@ -36,11 +37,11 @@ class PluginDebugCommand extends ContainerAwareCommand {
     $io = new DrupalStyle($input, $output);
 
     $pluginType = $input->getArgument('type');
+    $pluginId = $input->getArgument('id');
 
-    // No plugin type specified, display a list of plugin types.
+    // No plugin type specified, show a list of plugin types.
     if (!$pluginType) {
-      $tableHeader = [
-        $this->trans('Plugin type'),
+      $tableHeader = [$this->trans('Plugin type'),
         $this->trans('Plugin manager class')
       ];
       $tableRows = [];
@@ -61,19 +62,36 @@ class PluginDebugCommand extends ContainerAwareCommand {
       return $io->info('Plugin type "' . $pluginType . '" not found. No service available for that type.');
     }
 
-    // Valid plugin type specified, display a list of plugin IDs.
+    // Valid plugin type specified, no ID specified, show list of instances.
+    if (!$pluginId) {
+      $tableHeader = [
+        $this->trans('Plugin ID'),
+        $this->trans('Plugin class')
+      ];
+      $tableRows = [];
+      foreach ($service->getDefinitions() as $definition) {
+        $pluginId = $definition['id'];
+        $className = $definition['class'];
+        $tableRows[$pluginId] = [$pluginId, $className];
+      }
+      ksort($tableRows);
+      return $io->table($tableHeader, array_values($tableRows));
+    }
+
+    // Valid plugin type specified, ID specified, show the instance definition.
+    $definition = $service->getDefinition($pluginId);
+
     $tableHeader = [
-      $this->trans('Plugin ID'),
-      $this->trans('Plugin class')
+      $this->trans('Key'),
+      $this->trans('Value')
     ];
     $tableRows = [];
-    foreach ($service->getDefinitions() as $definition) {
-      $pluginId = $definition['id'];
-      $className = $definition['class'];
-      $tableRows[$pluginId] = [$pluginId, $className];
+    foreach ($definition as $key => $value) {
+      $value = is_object($value) && method_exists($value, '__toString') ? (string) $value : $value;
+      $value = (is_array($value) || is_object($value)) ? var_export($value, TRUE) : $value;
+      $tableRows[$key] = [$key, $value];
     }
     ksort($tableRows);
-
     return $io->table($tableHeader, array_values($tableRows));
   }
 }

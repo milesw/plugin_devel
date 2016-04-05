@@ -14,7 +14,7 @@ Documentation on plugin types: https://www.drupal.org/node/1637730
 List all plugin types and the corresponding plugin manager class.
 
 ### drupal plugin:debug [type]
-List all plugin instances of a particular type.
+List all plugin instances of the specified type.
 
-### drupal plugin:definition [type] [id]
-Dump the definition for a particular plugin instance.
+### drupal plugin:debug [type] [id]
+Dump the definition for the specific plugin instance.
