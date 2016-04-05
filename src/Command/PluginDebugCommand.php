@@ -7,6 +7,7 @@
 
 namespace Drupal\plugin_devel\Command;
 
+use Drupal\Component\Render\MarkupInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -53,7 +54,8 @@ class PluginDebugCommand extends ContainerAwareCommand {
     ];
     $tableRows = [];
     foreach ($definition as $key => $value) {
-      $value = (is_array($value) || is_object($value)) ? var_export($value) : $value;
+      $value = is_object($value) && method_exists($value, '__toString') ? (string) $value : $value;
+      $value = (is_array($value) || is_object($value)) ? var_export($value, TRUE) : $value;
       $tableRows[$key] = [$key, $value];
     }
     ksort($tableRows);
