@@ -14,3 +14,5 @@ Lists all plugin types and the corresponding plugin manager class.
 ### drupal plugin:list [type]
 Lists all plugins instances of a particular type.
 
+### drupal plugin:debug [type] [id]
+Dumps the plugin definition for a particular plugin instance.
