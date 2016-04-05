@@ -10,11 +10,11 @@ Documentation on plugin types: https://www.drupal.org/node/1637730
 
 ## Commands
 
-### drupal plugin:list
-Lists all plugin types and the corresponding plugin manager class.
+### drupal plugin:debug
+List all plugin types and the corresponding plugin manager class.
 
-### drupal plugin:list [type]
-Lists all plugin instances of a particular type.
+### drupal plugin:debug [type]
+List all plugin instances of a particular type.
 
-### drupal plugin:debug [type] [id]
-Dumps the plugin definition for a particular instance.
+### drupal plugin:definition [type] [id]
+Dump the definition for a particular plugin instance.
