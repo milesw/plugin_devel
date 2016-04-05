@@ -1,0 +1,5 @@
+name: Plugin Devel
+type: module
+description: Tools for developing and debugging plugins
+core: 8.x
+package: Development
