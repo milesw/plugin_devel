@@ -1,5 +1,7 @@
 # Plugin Devel
 
+Note: As of April 13, 2016 these commands are included with Drupal console. 
+
 ![Screenshot of terminal commands](https://raw.githubusercontent.com/milesw/plugin_devel/media/screenshot.png)
 
 This is a Drupal 8 module containing Drupal Console commands useful for developing and debugging plugins.
